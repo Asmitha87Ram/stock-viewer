@@ -1,13 +1,8 @@
-import streamlit as st
 import yfinance as yf
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-
-# Title
-st.title("📈 Stock Price Viewer")
 
 # Input
-ticker = st.text_input("Enter Stock Ticker (e.g., AAPL, TCS.NS)", "AAPL")
+ticker = input("Enter stock ticker (e.g., AAPL, TCS.NS): ")
 
 # Fetch data
 data = yf.download(ticker, period="7d")
@@ -15,22 +10,17 @@ data = yf.download(ticker, period="7d")
 if not data.empty:
 
     # Plot graph
-    fig, ax = plt.subplots(figsize=(10, 5))
+    plt.figure(figsize=(10, 5))
+    plt.plot(data.index, data['Close'], marker='o')
 
-    ax.plot(data.index, data['Close'], marker='o')
-
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Price")
-    ax.set_title(f"{ticker} Stock Price")
-
-    # ✅ FIXED DATE FORMAT
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%b'))
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
+    plt.title(f"{ticker} Stock Price")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
 
     plt.xticks(rotation=45)
-    plt.tight_layout()   # ⭐ fixes alignment
+    plt.tight_layout()
 
-    st.pyplot(fig)
+    plt.show()
 
     # Calculate values
     highest_price = data['High'].max()
@@ -41,10 +31,10 @@ if not data.empty:
 
     percentage_change = ((end_price - start_price) / start_price) * 100
 
-    # Display results
-    st.write(f"**Highest Price:** {highest_price:.2f}")
-    st.write(f"**Lowest Price:** {lowest_price:.2f}")
-    st.write(f"**Percentage Change:** {percentage_change:.2f}%")
+    # Output results
+    print(f"\nHighest Price: {highest_price:.2f}")
+    print(f"Lowest Price: {lowest_price:.2f}")
+    print(f"Percentage Change: {percentage_change:.2f}%")
 
 else:
-    st.error("Invalid ticker or no data found.")
+    print("Invalid ticker or no data found.")

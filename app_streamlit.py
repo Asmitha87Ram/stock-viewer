@@ -1,34 +1,50 @@
 import streamlit as st
 import yfinance as yf
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
+# Title
 st.title("📈 Stock Price Viewer")
 
-stock = st.text_input("Enter stock symbol (e.g., AAPL, TCS.NS)")
+# Input
+ticker = st.text_input("Enter Stock Ticker (e.g., AAPL, TCS.NS)", "AAPL")
 
-if stock:
-    data = yf.download(stock, period="7d")
+# Fetch data
+data = yf.download(ticker, period="7d")
 
-    if data.empty:
-        st.error("Invalid stock symbol")
-    else:
-        st.subheader(f"{stock} Stock Price (Last 7 Days)")
+if not data.empty:
 
-        fig, ax = plt.subplots()
-        ax.plot(data['Close'])
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Price")
-        st.pyplot(fig)
+    # Plot graph
+    fig, ax = plt.subplots(figsize=(12, 5))  # ✅ wider graph
 
-        highest_price = data['High'].max().item()
-        lowest_price = data['Low'].min().item()
+    ax.plot(data.index, data['Close'], marker='o')
 
-        start_price = data['Close'].iloc[0]
-        end_price = data['Close'].iloc[-1]
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Price")
+    ax.set_title(f"{ticker} Stock Price")
 
-        percentage_change = ((end_price - start_price) / start_price) * 100
-        percentage_change = percentage_change.item()
+    # ✅ FIXED DATE HANDLING (AUTO spacing)
+    ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%b'))
 
-        st.write(f"**Highest Price:** {highest_price:.2f}")
-        st.write(f"**Lowest Price:** {lowest_price:.2f}")
-        st.write(f"**Percentage Change:** {percentage_change:.2f}%")
+    plt.xticks(rotation=45, ha='right')  # ✅ better alignment
+    plt.tight_layout()  # ✅ prevents overlap
+
+    st.pyplot(fig)
+
+    # Calculate values
+    highest_price = data['High'].max()
+    lowest_price = data['Low'].min()
+
+    start_price = data['Close'].iloc[0]
+    end_price = data['Close'].iloc[-1]
+
+    percentage_change = ((end_price - start_price) / start_price) * 100
+
+    # Display results
+    st.write(f"**Highest Price:** {highest_price:.2f}")
+    st.write(f"**Lowest Price:** {lowest_price:.2f}")
+    st.write(f"**Percentage Change:** {percentage_change:.2f}%")
+
+else:
+    st.error("Invalid ticker or no data found.")
