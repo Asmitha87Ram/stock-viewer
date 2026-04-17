@@ -1,15 +1,21 @@
 import yfinance as yf
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # Input
-ticker = input("Enter stock ticker (e.g., AAPL, TCS.NS): ")
+ticker = input("Enter stock ticker (e.g., AAPL, TCS.NS): ").upper()
+period = input("Enter period (7d, 1mo, 3mo, 6mo): ")
 
 # Fetch data
-data = yf.download(ticker, period="7d")
+data = yf.download(ticker, period=period)
+
+# Fix MultiIndex
+if isinstance(data.columns, pd.MultiIndex):
+    data.columns = data.columns.droplevel(1)
 
 if not data.empty:
 
-    # Plot graph
+    # Plot
     plt.figure(figsize=(10, 5))
     plt.plot(data.index, data['Close'], marker='o')
 
@@ -19,10 +25,9 @@ if not data.empty:
 
     plt.xticks(rotation=45)
     plt.tight_layout()
-
     plt.show()
 
-    # Calculate values (FIXED)
+    # Calculations
     highest_price = float(data['High'].max())
     lowest_price = float(data['Low'].min())
 
@@ -31,10 +36,15 @@ if not data.empty:
 
     percentage_change = ((end_price - start_price) / start_price) * 100
 
-    # Output results
-    print(f"\nHighest Price: {highest_price:.2f}")
+    # Output
+    print("\n--- Stock Summary ---")
+    print(f"Highest Price: {highest_price:.2f}")
     print(f"Lowest Price: {lowest_price:.2f}")
-    print(f"Percentage Change: {percentage_change:.2f}%")
+
+    if percentage_change >= 0:
+        print(f"Percentage Change: {percentage_change:.2f}% 📈 Profit")
+    else:
+        print(f"Percentage Change: {percentage_change:.2f}% 📉 Loss")
 
 else:
-    print("Invalid ticker or no data found.")
+    print("❌ Invalid ticker or no data found")
