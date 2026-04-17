@@ -1,16 +1,35 @@
 # 📈 Stock Price Viewer
 
-A Python project that fetches real-time stock data and visualizes it using graphs.
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)
+![Status](https://img.shields.io/badge/Status-Live-success)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+A Python-based stock analysis tool that fetches real-time market data, visualizes trends, and provides key financial insights through both CLI and web applications.
 
 ---
 
-## 🚀 Features
+## 🌐 Live Demo
 
-- 📊 Fetch stock data using yfinance  
-- 📈 Plot stock price trends  
-- 🔝 Display highest & lowest prices  
-- 📉 Calculate percentage change  
-- 🌐 Web app version using Streamlit  
+🚀 https://stock-viewer-app.streamlit.app/
+
+---
+
+## 📸 Preview
+
+![App Screenshot](screenshot.png)
+
+---
+
+## ✨ Features
+
+- 📊 Real-time stock data using yfinance  
+- 📈 Price trend visualization  
+- 🔝 Highest & lowest price tracking  
+- 📉 Percentage change calculation  
+- 🌐 Web app built with Streamlit  
+- ⚡ Fast performance using caching  
+- 🛡️ Handles invalid inputs safely  
 
 ---
 
@@ -19,62 +38,68 @@ A Python project that fetches real-time stock data and visualizes it using graph
 - Python  
 - yfinance  
 - matplotlib  
-- streamlit  
+- Streamlit  
 
 ---
 
 ## 💻 Run Locally
 
-### 1. Install dependencies
+### Clone the repository
 
+```bash
+git clone https://github.com/Asmitha87Ram/stock-viewer.git
+cd stock-viewer
+```
+
+### Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
----
+### Run CLI version
 
-### 2. Run CLI version
-
+```bash
 python app.py
+```
 
----
+### Run Streamlit app
 
-### 3. Run Streamlit app
-
+```bash
 streamlit run app_streamlit.py
-
----
-
-## 🌐 Live App
-
-https://stock-viewer-app.streamlit.app
+```
 
 ---
 
 ## 📂 Project Structure
 
+```
 stock-viewer/
-│── app.py                # CLI version  
-│── app_streamlit.py      # Web app  
-│── requirements.txt      # Dependencies  
+│── app.py  
+│── app_streamlit.py  
+│── requirements.txt  
+│── screenshot.png  
 │── README.md  
+```
 
 ---
 
 ## 🧠 What I Learned
 
-- Working with APIs using yfinance  
+- Working with real-time APIs  
 - Data visualization using matplotlib  
 - Building web apps using Streamlit  
 - Handling real-world data issues  
-
----
-
-## 📌 Notes
-
-- Supports stock tickers like AAPL, TSLA, TCS.NS  
-- Requires internet connection  
+- Deploying applications to the cloud  
 
 ---
 
 ## 👨‍💻 Author
 
-Asmitha Ram
+**Asmitha Ram**
+
+---
+
+## ⭐ Support
+
+If you like this project, consider giving it a ⭐ on GitHub!
