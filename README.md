@@ -17,7 +17,9 @@ A Python-based stock analysis tool that fetches real-time market data, visualize
 
 ## 📸 Preview
 
-![App Screenshot](screenshot.png)
+<p align="center">
+  <img src="screenshot.png" width="700"/>
+</p>
 
 ---
 
