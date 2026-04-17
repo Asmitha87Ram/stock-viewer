@@ -3,7 +3,6 @@
 ![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)
 ![Status](https://img.shields.io/badge/Status-Live-success)
-![License](https://img.shields.io/badge/License-MIT-green)
 
 A Python-based stock analysis tool that fetches real-time market data, visualizes trends, and provides key financial insights through both CLI and web applications.
 
