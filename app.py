@@ -22,7 +22,8 @@ start_price = data['Close'].iloc[0]
 end_price = data['Close'].iloc[-1]
 
 percentage_change = ((end_price - start_price) / start_price) * 100
+percentage_change = percentage_change.item()
 
-print("Highest Price:", round(highest_price, 2))
-print("Lowest Price:", round(lowest_price, 2))
-print("Percentage Change:", round(percentage_change, 2), "%")
+print(f"Highest Price: {highest_price:.2f}")
+print(f"Lowest Price: {lowest_price:.2f}")
+print(f"Percentage Change: {percentage_change:.2f} %")
