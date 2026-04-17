@@ -15,8 +15,8 @@ plt.xlabel("Date")
 plt.ylabel("Price")
 plt.show()
 
-highest_price = data['High'].max()
-lowest_price = data['Low'].min()
+highest_price = data['High'].max().item()
+lowest_price = data['Low'].min().item()
 
 start_price = data['Close'].iloc[0]
 end_price = data['Close'].iloc[-1]
