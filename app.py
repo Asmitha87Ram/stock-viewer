@@ -14,8 +14,8 @@ plt.show()
 highest_price = data['High'].max()
 lowest_price = data['Low'].min()
 
-start_price = data['Close'][0]
-end_price = data['Close'][-1]
+start_price = data['Close'].iloc[0]
+end_price = data['Close'].iloc[-1]
 
 percentage_change = ((end_price - start_price) / start_price) * 100
 
