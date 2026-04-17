@@ -1,29 +1,50 @@
+import streamlit as st
 import yfinance as yf
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
-stock = input("Enter stock symbol (e.g., AAPL, TCS.NS): ")
+# Title
+st.title("📈 Stock Price Viewer")
 
-data = yf.download(stock, period="7d")
+# Input
+ticker = st.text_input("Enter Stock Ticker (e.g., AAPL, TCS.NS)", "AAPL")
 
-if data.empty:
-    print("Invalid stock symbol or no data found.")
-    exit()
+# Fetch data
+data = yf.download(ticker, period="7d")
 
-plt.plot(data['Close'])
-plt.title(f"{stock} Stock Price (Last 7 Days)")
-plt.xlabel("Date")
-plt.ylabel("Price")
-plt.show()
+if not data.empty:
 
-highest_price = data['High'].max().item()
-lowest_price = data['Low'].min().item()
+    # Plot graph
+    fig, ax = plt.subplots(figsize=(10, 5))
 
-start_price = data['Close'].iloc[0]
-end_price = data['Close'].iloc[-1]
+    ax.plot(data.index, data['Close'], marker='o')
 
-percentage_change = ((end_price - start_price) / start_price) * 100
-percentage_change = percentage_change.item()
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Price")
+    ax.set_title(f"{ticker} Stock Price")
 
-print(f"Highest Price: {highest_price:.2f}")
-print(f"Lowest Price: {lowest_price:.2f}")
-print(f"Percentage Change: {percentage_change:.2f} %")
+    # ✅ FIXED DATE FORMAT
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%b'))
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
+
+    plt.xticks(rotation=45)
+    plt.tight_layout()   # ⭐ fixes alignment
+
+    st.pyplot(fig)
+
+    # Calculate values
+    highest_price = data['High'].max()
+    lowest_price = data['Low'].min()
+
+    start_price = data['Close'].iloc[0]
+    end_price = data['Close'].iloc[-1]
+
+    percentage_change = ((end_price - start_price) / start_price) * 100
+
+    # Display results
+    st.write(f"**Highest Price:** {highest_price:.2f}")
+    st.write(f"**Lowest Price:** {lowest_price:.2f}")
+    st.write(f"**Percentage Change:** {percentage_change:.2f}%")
+
+else:
+    st.error("Invalid ticker or no data found.")
