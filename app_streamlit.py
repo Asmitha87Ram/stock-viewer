@@ -3,10 +3,16 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# Title
+# ----------------------------
+# Page Config
+# ----------------------------
+st.set_page_config(page_title="Stock Viewer", layout="wide")
+
 st.title("📈 Stock Price Viewer")
 
-# Sidebar options
+# ----------------------------
+# Sidebar
+# ----------------------------
 st.sidebar.header("Options")
 
 ticker = st.sidebar.selectbox(
@@ -17,46 +23,72 @@ ticker = st.sidebar.selectbox(
 custom_ticker = st.sidebar.text_input("Or enter custom ticker")
 
 if custom_ticker:
-    ticker = custom_ticker.upper()
+    ticker = custom_ticker.upper().strip()
 
 period = st.sidebar.selectbox(
     "Select period",
     ["1mo", "3mo", "6mo", "1y"]
 )
 
-# Fetch data
-with st.spinner("Fetching stock data..."):
+# ----------------------------
+# Fetch Data (with caching)
+# ----------------------------
+@st.cache_data
+def load_data(ticker, period):
     data = yf.download(ticker, period=period)
+    
+    # Handle MultiIndex (safe fix)
+    if isinstance(data.columns, pd.MultiIndex):
+        data.columns = data.columns.droplevel(1)
+        
+    return data
 
-# Fix MultiIndex issue (safe handling)
-if isinstance(data.columns, pd.MultiIndex):
-    data.columns = data.columns.droplevel(1)
 
-# Plot graph
-fig, ax = plt.subplots(figsize=(10, 4))
-ax.plot(data.index, data['Close'], marker='o')
-ax.set_title(f"{ticker} Stock Price")
+with st.spinner("Fetching stock data..."):
+    data = load_data(ticker, period)
+
+# ----------------------------
+# Handle empty data
+# ----------------------------
+if data.empty:
+    st.error("⚠️ No data found. Try another stock ticker.")
+    st.stop()
+
+# ----------------------------
+# Plot
+# ----------------------------
+fig, ax = plt.subplots(figsize=(12, 5))
+
+ax.plot(data.index, data["Close"], marker="o", linewidth=2)
+
+ax.set_title(f"{ticker} Stock Price", fontsize=14)
 ax.set_xlabel("Date")
 ax.set_ylabel("Price")
+
 plt.xticks(rotation=45)
+plt.grid(True, linestyle="--", alpha=0.6)
 plt.tight_layout()
 
 st.pyplot(fig)
 
-# Calculate metrics safely
-highest_price = float(data['High'].max())
-lowest_price = float(data['Low'].min())
+# ----------------------------
+# Metrics Calculation
+# ----------------------------
+highest_price = float(data["High"].max())
+lowest_price = float(data["Low"].min())
 
-start_price = float(data['Close'].iloc[0])
-end_price = float(data['Close'].iloc[-1])
+start_price = float(data["Close"].iloc[0])
+end_price = float(data["Close"].iloc[-1])
 
 percentage_change = ((end_price - start_price) / start_price) * 100
 
-# Display metrics
+# ----------------------------
+# Metrics Display
+# ----------------------------
 st.subheader("📌 Key Metrics")
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Highest Price", f"{highest_price:.2f}")
-col2.metric("Lowest Price", f"{lowest_price:.2f}")
+col1.metric("Highest Price", f"${highest_price:.2f}")
+col2.metric("Lowest Price", f"${lowest_price:.2f}")
 col3.metric("Percentage Change", f"{percentage_change:.2f}%")
