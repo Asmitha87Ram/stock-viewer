@@ -22,12 +22,12 @@ if not data.empty:
 
     plt.show()
 
-    # Calculate values
-    highest_price = data['High'].max()
-    lowest_price = data['Low'].min()
+    # Calculate values (FIXED)
+    highest_price = float(data['High'].max())
+    lowest_price = float(data['Low'].min())
 
-    start_price = data['Close'].iloc[0]
-    end_price = data['Close'].iloc[-1]
+    start_price = float(data['Close'].iloc[0])
+    end_price = float(data['Close'].iloc[-1])
 
     percentage_change = ((end_price - start_price) / start_price) * 100
 

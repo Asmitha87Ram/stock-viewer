@@ -15,7 +15,7 @@ data = yf.download(ticker, period="7d")
 if not data.empty:
 
     # Plot graph
-    fig, ax = plt.subplots(figsize=(12, 5))  # ✅ wider graph
+    fig, ax = plt.subplots(figsize=(12, 5))
 
     ax.plot(data.index, data['Close'], marker='o')
 
@@ -23,21 +23,21 @@ if not data.empty:
     ax.set_ylabel("Price")
     ax.set_title(f"{ticker} Stock Price")
 
-    # ✅ FIXED DATE HANDLING (AUTO spacing)
+    # Fix date alignment
     ax.xaxis.set_major_locator(mdates.AutoDateLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d-%b'))
 
-    plt.xticks(rotation=45, ha='right')  # ✅ better alignment
-    plt.tight_layout()  # ✅ prevents overlap
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
 
     st.pyplot(fig)
 
-    # Calculate values
-    highest_price = data['High'].max()
-    lowest_price = data['Low'].min()
+    # Calculate values (FIXED)
+    highest_price = float(data['High'].max())
+    lowest_price = float(data['Low'].min())
 
-    start_price = data['Close'].iloc[0]
-    end_price = data['Close'].iloc[-1]
+    start_price = float(data['Close'].iloc[0])
+    end_price = float(data['Close'].iloc[-1])
 
     percentage_change = ((end_price - start_price) / start_price) * 100
 
