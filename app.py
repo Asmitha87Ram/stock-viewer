@@ -5,6 +5,10 @@ stock = input("Enter stock symbol (e.g., AAPL, TCS.NS): ")
 
 data = yf.download(stock, period="7d")
 
+if data.empty:
+    print("Invalid stock symbol or no data found.")
+    exit()
+
 plt.plot(data['Close'])
 plt.title(f"{stock} Stock Price (Last 7 Days)")
 plt.xlabel("Date")
